@@ -393,6 +393,7 @@ const Calculator: React.FC<CalculatorProps> = ({ addHistoryItem, setActiveView, 
   const processImage = useCallback(async (file: File) => {
     setIsLoading(true);
     setError(null);
+    setIsCameraViewOpen(false);
 
     const readFileAsDataURL = (imageFile: File): Promise<string> => {
       return new Promise((resolve, reject) => {
@@ -426,9 +427,12 @@ const Calculator: React.FC<CalculatorProps> = ({ addHistoryItem, setActiveView, 
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred.");
       setImageDataUrl(null);
+      // Re-open scanner modal to show the error
+      setIsScannerOpen(true);
     } finally {
       setIsLoading(false);
-      setIsScannerOpen(false);
+      // Close the scanner modal only if successful
+      if(!error) setIsScannerOpen(false);
     }
   }, []);
 
@@ -764,4 +768,88 @@ const Calculator: React.FC<CalculatorProps> = ({ addHistoryItem, setActiveView, 
         <div id="container-ddf6db119bda9bc8128968b958248a5b"></div>
       </div>
 
-      {
+      {isScannerOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-40" onClick={() => setIsScannerOpen(false)}>
+            <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-8 w-full max-w-sm mx-4 text-center shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+                <h3 className="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">Scan a Receipt</h3>
+                <p className="text-text-secondary-light dark:text-text-secondary-dark">Choose how to provide the receipt image.</p>
+                {isLoading && <Spinner message="Analyzing your receipt..." />}
+                {error && <p className="text-red-500 bg-red-100 dark:bg-red-900/50 p-3 rounded-lg">{error}</p>}
+                <div className="flex flex-col gap-4 pt-2">
+                    <button onClick={() => fileInputRef.current?.click()} className="w-full py-3 rounded-lg bg-key-orange text-text-on-orange font-semibold flex items-center justify-center gap-2">
+                        <Icon icon="upload" className="w-6 h-6" /> Upload Image
+                    </button>
+                    <button onClick={() => { setIsScannerOpen(false); setIsCameraViewOpen(true); }} className="w-full py-3 rounded-lg bg-key-dark-light dark:bg-key-dark-dark text-text-on-dark font-semibold flex items-center justify-center gap-2">
+                        <Icon icon="camera" className="w-6 h-6" /> Use Camera
+                    </button>
+                </div>
+                <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
+            </div>
+        </div>
+      )}
+
+      {isCameraViewOpen && <CameraCapture onCapture={processImage} onClose={() => setIsCameraViewOpen(false)} />}
+      
+      {isAddModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setIsAddModalOpen(false)}>
+            <form onSubmit={handleAddExpense} className="bg-surface-light dark:bg-surface-dark rounded-2xl p-6 w-full max-w-sm mx-4 text-left shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+                <div className="flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">Add Manual Expense</h3>
+                    <button type="button" onClick={() => setIsAddModalOpen(false)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-key-dark-dark">
+                        <Icon icon="close" className="w-6 h-6" />
+                    </button>
+                </div>
+                <div>
+                    <label htmlFor="expenseAmount" className="block text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Amount</label>
+                    <input
+                        type="number"
+                        id="expenseAmount"
+                        value={expenseAmount}
+                        onChange={e => setExpenseAmount(e.target.value)}
+                        placeholder="0.00"
+                        step="0.01"
+                        required
+                        className="mt-1 w-full bg-key-dark-light dark:bg-key-dark-dark text-text-on-dark-light dark:text-on-dark-dark px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-key-orange"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="expenseDescription" className="block text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Description (Optional)</label>
+                    <input
+                        type="text"
+                        id="expenseDescription"
+                        value={expenseDescription}
+                        onChange={e => setExpenseDescription(e.target.value)}
+                        placeholder="e.g., Lunch with client"
+                        className="mt-1 w-full bg-key-dark-light dark:bg-key-dark-dark text-text-on-dark-light dark:text-on-dark-dark px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-key-orange"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="expenseCategory" className="block text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Category</label>
+                    <input
+                        list="category-suggestions-modal"
+                        id="expenseCategory"
+                        type="text"
+                        value={expenseCategory}
+                        onChange={e => setExpenseCategory(e.target.value)}
+                        placeholder="e.g., Food & Drink"
+                        required
+                        className="mt-1 w-full bg-key-dark-light dark:bg-key-dark-dark text-text-on-dark-light dark:text-on-dark-dark px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-key-orange"
+                    />
+                    <datalist id="category-suggestions-modal">
+                        {customCategories.map(cat => <option key={cat} value={cat} />)}
+                    </datalist>
+                </div>
+                <button
+                    type="submit"
+                    className="w-full px-4 py-2 mt-2 rounded-lg bg-key-orange-dark text-text-on-orange-dark font-semibold transition-transform duration-100 active:scale-95"
+                >
+                    Add Expense
+                </button>
+            </form>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Calculator;
