@@ -1,0 +1,18 @@
+{
+  "name": "AI Bill Calculator",
+  "short_name": "AI Calculator",
+  "description": "An intelligent bill and receipt scanner that uses AI to extract amounts, calculate the total, and categorize expenses from an uploaded image.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}

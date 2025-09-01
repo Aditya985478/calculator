@@ -1,0 +1,7 @@
+{
+  "name": "Copy of AI Bill Calculator",
+  "description": "An intelligent bill and receipt scanner that uses AI to extract amounts, calculate the total, and categorize expenses from an uploaded image.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

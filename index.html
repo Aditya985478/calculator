@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Calculator</title>
+
+    <!-- PWA additions -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="/vite.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI Calculator">
+    <!-- End PWA additions -->
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'background': { light: '#f8fafc', dark: '#000000' },
+              'display': { light: '#f8fafc', dark: '#000000' },
+              'text-display': { light: '#000000', dark: '#ffffff' },
+              'text-display-secondary': { light: '#6b7280', dark: '#a0a0a0'},
+              
+              // Number buttons (dark gray)
+              'key-dark': { light: '#e0e0e0', dark: '#333333' },
+              'key-dark-hover': { light: '#d0d0d0', dark: '#555555' },
+              'text-on-dark': { light: '#000000', dark: '#ffffff' },
+              
+              // Function buttons (light gray)
+              'key-light': { light: '#d6d6d6', dark: '#a5a5a5' },
+              'key-light-hover': { light: '#c6c6c6', dark: '#c1c1c1' },
+              'text-on-light': { light: '#000000', dark: '#000000' },
+              
+              // Operator buttons (orange)
+              'key-orange': { light: '#ff9500', dark: '#ff9500' },
+              'key-orange-hover': { light: '#ffab38', dark: '#ffab38' },
+              'text-on-orange': { light: '#ffffff', dark: '#ffffff' },
+
+              'surface': { light: '#ffffff', dark: '#2c2c2e' },
+              'text-primary': { light: '#111827', dark: '#f9fafb' },
+              'text-secondary': { light: '#6b7280', dark: '#d4d4d2' },
+              'border': { light: '#e5e7eb', dark: '#424245' }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0"
+  }
+}
+</script>
+<script async="async" data-cfasync="false" src="//pl27551279.revenuecpmgate.com/ddf6db119bda9bc8128968b958248a5b/invoke.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+    
